@@ -1,0 +1,97 @@
+
+> fountain-bridge-nextjs@0.1.0 start
+> next start
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 214ms
+
+> fountain-bridge-nextjs@0.1.0 start
+> next start
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 173ms
+ ⚠ For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'npm i sharp', and Next.js will use it automatically for Image Optimization.
+Read more: https://nextjs.org/docs/messages/sharp-missing-in-production
+
+> fountain-bridge-nextjs@0.1.0 start
+> next start
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 196ms
+ ⚠ For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'npm i sharp', and Next.js will use it automatically for Image Optimization.
+Read more: https://nextjs.org/docs/messages/sharp-missing-in-production
+
+> fountain-bridge-nextjs@0.1.0 start
+> next start
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 189ms
+ ⚠ For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'npm i sharp', and Next.js will use it automatically for Image Optimization.
+Read more: https://nextjs.org/docs/messages/sharp-missing-in-production
+
+> fountain-bridge-nextjs@0.1.0 start
+> next start
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 181ms
+ ⚠ For production Image Optimization with Next.js, the optional 'sharp' package is strongly recommended. Run 'npm i sharp', and Next.js will use it automatically for Image Optimization.
+Read more: https://nextjs.org/docs/messages/sharp-missing-in-production
+Error: Failed to find Server Action "fb7e3d49". This request might be from an older or newer deployment. 
+    at r$ (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:17:1667)
+    at rE (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:15:6522)
+    at no (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:19:1150)
+    at /home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:20:726
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at Object.wrap (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:13:17831)
+    at /home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:20:616
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at Object.wrap (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:13:16935)
+    at ni (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:20:543)
+Error: Failed to find Server Action "d26eb692". This request might be from an older or newer deployment. 
+    at r$ (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:17:1667)
+    at rE (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:15:6522)
+    at no (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:19:1150)
+    at /home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:20:726
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at Object.wrap (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:13:17831)
+    at /home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:20:616
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at Object.wrap (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:13:16935)
+    at ni (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:20:543)
+Error: Failed to find Server Action "b56bd84a". This request might be from an older or newer deployment. 
+    at r$ (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:17:1667)
+    at rE (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:15:6522)
+    at no (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:19:1150)
+    at /home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:20:726
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at Object.wrap (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:13:17831)
+    at /home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:20:616
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at Object.wrap (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:13:16935)
+    at ni (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:20:543)
+Error: Failed to find Server Action "cb0951fe". This request might be from an older or newer deployment. 
+    at r$ (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:17:1667)
+    at rE (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:15:6522)
+    at no (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:19:1150)
+    at /home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:20:726
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at Object.wrap (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:13:17831)
+    at /home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:20:616
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at Object.wrap (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:13:16935)
+    at ni (/home/openclaw/Desktop/fountain-bridge-association-nextjs/node_modules/next/dist/compiled/next-server/app-page.runtime.prod.js:20:543)
