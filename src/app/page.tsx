@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { ArrowRight, CheckCircle2, HeartHandshake, MapPin, Share2 } from "lucide-react";
 import { ButtonLink } from "@/components/ButtonLink";
 import { FacebookFeed } from "@/components/FacebookFeed";
+import { LoadingImage } from "@/components/LoadingImage";
 import { MapWidget } from "@/components/MapWidget";
 import { MotionSection } from "@/components/MotionSection";
 import {
@@ -21,11 +21,12 @@ export default function Home() {
     <>
       <section className="relative overflow-hidden bg-teal-900 text-white">
         <div className="absolute inset-0 opacity-25">
-          <Image
+          <LoadingImage
             src={site.heroImage}
             alt="Fountain Bridge community outreach"
             fill
             priority
+            sizes="100vw"
             className="object-cover"
           />
         </div>
@@ -134,7 +135,7 @@ export default function Home() {
             {impactAreas.map((item) => (
               <article key={item.title} className="overflow-hidden rounded-lg bg-white shadow-soft">
                 <div className="relative h-44">
-                  <Image src={item.image} alt={item.title} fill className="object-cover" />
+                  <LoadingImage src={item.image} alt={item.title} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
                 </div>
                 <div className="p-5">
                   <CheckCircle2 className="mb-4 text-teal-700" />
@@ -184,7 +185,7 @@ export default function Home() {
               return (
                 <article key={program.title} className="overflow-hidden rounded-lg bg-white shadow-soft">
                   <div className="relative h-44">
-                    <Image src={program.image} alt="" fill className="object-cover" />
+                    <LoadingImage src={program.image} alt="" fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw" className="object-cover" />
                   </div>
                   <div className="p-5">
                     <Icon className="mb-4 text-teal-700" />

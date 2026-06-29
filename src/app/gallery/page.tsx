@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { LoadingImage } from "@/components/LoadingImage";
 import { PageHero } from "@/components/PageHero";
 import { facebook, gallery } from "@/data/site";
 
@@ -20,7 +20,7 @@ export default function GalleryPage() {
           {gallery.map((item) => (
             <figure key={item.title} className="overflow-hidden rounded-lg bg-white shadow-soft">
               <div className="relative h-72">
-                <Image src={item.image} alt={item.title} fill className="object-cover transition duration-500 hover:scale-105" />
+                <LoadingImage src={item.image} alt={item.title} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover transition duration-500 hover:scale-105" />
               </div>
               <figcaption className="p-5">
                 <p className="font-serif text-xl font-black text-teal-900">{item.title}</p>

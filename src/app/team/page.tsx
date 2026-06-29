@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { UserRound } from "lucide-react";
 import { ButtonLink } from "@/components/ButtonLink";
+import { LoadingImage } from "@/components/LoadingImage";
 import { PageHero } from "@/components/PageHero";
 import { team } from "@/data/site";
 
@@ -23,7 +23,7 @@ export default function TeamPage() {
             <article key={member.name} className="overflow-hidden rounded-lg bg-white shadow-soft">
               {member.photo ? (
                 <div className="relative h-80">
-                  <Image src={member.photo} alt={member.name} fill className="object-cover" />
+                  <LoadingImage src={member.photo} alt={member.name} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
                 </div>
               ) : (
                 <div className={`grid h-80 place-items-center ${member.character === "male" ? "bg-teal-900" : "bg-gold-100"}`}>

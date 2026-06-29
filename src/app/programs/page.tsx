@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { ButtonLink } from "@/components/ButtonLink";
+import { LoadingImage } from "@/components/LoadingImage";
 import { PageHero } from "@/components/PageHero";
 import { impactAreas, programs, projects } from "@/data/site";
 
@@ -25,7 +25,7 @@ export default function ProgramsPage() {
             return (
               <article key={program.title} className="overflow-hidden rounded-lg bg-white shadow-soft">
                 <div className="relative h-64">
-                  <Image src={program.image} alt="" fill className="object-cover" />
+                  <LoadingImage src={program.image} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
                 </div>
                 <div className="p-7">
                   <Icon className="mb-4 text-teal-700" size={32} />
@@ -44,7 +44,7 @@ export default function ProgramsPage() {
             {impactAreas.map((item) => (
               <article key={item.title} className="overflow-hidden rounded-lg bg-white shadow-soft">
                 <div className="relative h-56">
-                  <Image src={item.image} alt={item.title} fill className="object-cover" />
+                  <LoadingImage src={item.image} alt={item.title} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
                 </div>
                 <div className="p-6">
                   <h3 className="font-serif text-2xl font-black text-teal-900">{item.title}</h3>
@@ -62,7 +62,7 @@ export default function ProgramsPage() {
             {projects.map((project) => (
               <article key={project.title} className="overflow-hidden rounded-lg bg-white shadow-soft">
                 <div className="relative h-64">
-                  <Image src={project.image} alt={project.title} fill className="object-cover" />
+                  <LoadingImage src={project.image} alt={project.title} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
                 </div>
                 <div className="p-7">
                   <p className="text-sm font-black uppercase tracking-wide text-gold-600">{project.status}</p>

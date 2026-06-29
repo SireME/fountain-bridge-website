@@ -30,6 +30,28 @@ Sources checked before implementation:
 - Gallery and program visuals use selected local images from the refreshed `foun/` upload folder.
 - Facebook is integrated only through no-auth methods: SDK script, Page Plugin, Follow Button, and static links.
 
+## Image Performance Update
+
+The production image pass keeps all content, captions, filenames, and logo assets unchanged. Only non-logo uploaded JPG assets under `public/uploads/foun/` were recompressed in place.
+
+Research applied:
+
+- Next.js image documentation recommends `next/image` for responsive image delivery, modern format optimization, lazy loading, layout-stability handling, and placeholders.
+- web.dev image performance guidance recommends lazy loading below-the-fold images so the browser can prioritize visible content.
+- The active implementation therefore keeps `next/image`, adds explicit `sizes` values for responsive delivery, keeps the hero image eager with `priority`, lazy-loads normal content images through default browser behavior, and shows a branded loading state while each field/program/gallery/team image is still loading.
+
+Asset result:
+
+- Non-logo uploaded JPG payload changed from about `112.8 MB` to about `28.6 MB`.
+- Approximate image payload saved: `84.2 MB`.
+- Logo assets were intentionally skipped so association branding remains untouched.
+
+Implementation notes:
+
+- `src/components/LoadingImage.tsx` wraps `next/image` with a Fountain Bridge logo loading overlay and a fade-in transition.
+- Existing page content is unchanged; page image render calls were switched to the wrapper only where public program, impact, gallery, hero, project, or team photos are displayed.
+- If future uploaded photos are added, recompress them before deployment and keep the logo folder out of compression passes.
+
 ## Tech Stack
 
 - Next.js `14.2.35` with App Router
