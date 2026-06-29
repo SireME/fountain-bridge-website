@@ -52,6 +52,23 @@ Implementation notes:
 - Existing page content is unchanged; page image render calls were switched to the wrapper only where public program, impact, gallery, hero, project, or team photos are displayed.
 - If future uploaded photos are added, recompress them before deployment and keep the logo folder out of compression passes.
 
+## Visitor Contact UX
+
+The site includes a small client-side contact layer in `src/components/VisitorContactTools.tsx`.
+
+Research applied:
+
+- WhatsApp click-to-chat uses the official `https://wa.me/<international-number>?text=<encoded-message>` format so visitors can contact the organization without saving the number first.
+- Browser `localStorage` persists across sessions but has no built-in expiry, so the popup stores a timestamp and suppresses itself for 10 days after the visitor clicks either `Later`, close, or the WhatsApp button.
+- The back-to-top button uses the browser `window.scrollTo({ top: 0, behavior: "smooth" })` API and only appears after the visitor has scrolled down the page.
+
+Implementation notes:
+
+- The WhatsApp prompt appears on first visit, uses the association logo, and links to the public organization phone number from `src/data/site.ts`.
+- A compact WhatsApp floating button remains available after the popup is dismissed.
+- A separate back-to-top button appears in the lower-right corner after scrolling.
+- No page copy or content data was changed for this UX layer.
+
 ## Tech Stack
 
 - Next.js `14.2.35` with App Router

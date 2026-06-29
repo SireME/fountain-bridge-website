@@ -4,6 +4,7 @@ import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { VisitorContactTools } from "@/components/VisitorContactTools";
 import { site } from "@/data/site";
 
 const inter = Inter({
@@ -76,6 +77,7 @@ export default function RootLayout({
         <Header />
         <main>{children}</main>
         <Footer />
+        <VisitorContactTools />
       </body>
     </html>
   );
