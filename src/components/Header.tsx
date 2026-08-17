@@ -3,36 +3,91 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
-import { facebook, navItems, site } from "@/data/site";
+import { Menu, Phone, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ButtonLink } from "@/components/ButtonLink";
+import { SocialLinks } from "@/components/SocialLinks";
+import { donateNavItem, primaryNavItems, site } from "@/data/site";
+
+const MENU_ID = "primary-navigation";
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
+  // Close the panel after navigating so the next page starts from the top.
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  // Escape closes the disclosure and returns focus to the button that opened it
+  // (WAI-ARIA disclosure navigation pattern).
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        toggleRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
+  // Stop the page behind the open menu from scrolling.
+  useEffect(() => {
+    if (!open) return;
+
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
+
+  const isCurrent = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
     <header className="sticky top-0 z-50 border-b border-teal-900/10 bg-linen/95 backdrop-blur">
-      <div className="section-shell flex h-[var(--header-height)] items-center justify-between gap-4">
-        <Link href="/" className="focus-ring flex min-w-0 items-center gap-2 rounded-md sm:gap-3">
-          <span className="relative h-11 w-24 shrink-0 overflow-hidden rounded-md bg-white shadow-sm ring-1 ring-teal-900/10 sm:h-12 sm:w-48">
-            <Image src={site.logo} alt={`${site.name} logo`} fill priority sizes="(max-width: 640px) 96px, 192px" className="object-contain p-1" />
+      <div className="section-shell flex h-[var(--header-height)] items-center justify-between gap-3">
+        <Link
+          href="/"
+          aria-label={`${site.name} — home`}
+          className="focus-ring flex min-w-0 items-center gap-2 rounded-md sm:gap-3"
+        >
+          <span className="relative h-10 w-24 shrink-0 overflow-hidden rounded-md bg-white shadow-sm ring-1 ring-teal-900/10 sm:h-12 sm:w-40 lg:w-36 xl:w-44">
+            <Image
+              src={site.logo}
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 640px) 96px, 176px"
+              className="object-contain p-1"
+            />
           </span>
-          <span className="min-w-0 leading-tight">
-            <span className="block truncate text-sm font-black uppercase tracking-wide text-teal-900">{site.shortName}</span>
+          <span className="min-w-0 leading-tight lg:hidden xl:block">
+            <span className="block truncate text-sm font-black uppercase tracking-wide text-teal-900">
+              {site.shortName}
+            </span>
             <span className="hidden text-xs text-muted sm:block">Buea, Cameroon</span>
           </span>
         </Link>
 
-        <nav aria-label="Primary navigation" className="hidden items-center gap-1 lg:flex">
-          {navItems.map((item) => {
-            const active = pathname === item.href;
+        <nav aria-label="Primary" className="hidden items-center gap-0.5 lg:flex xl:gap-1">
+          {primaryNavItems.map((item) => {
+            const current = isCurrent(item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`focus-ring rounded-md px-3 py-2 text-sm font-semibold transition ${
-                  active ? "bg-teal-700 text-white" : "text-ink hover:bg-teal-50 hover:text-teal-900"
+                aria-current={current ? "page" : undefined}
+                className={`focus-ring rounded-md px-2.5 py-2 text-[13px] font-semibold transition xl:px-3 xl:text-sm ${
+                  current
+                    ? "bg-teal-700 text-white"
+                    : "text-ink hover:bg-teal-50 hover:text-teal-900"
                 }`}
               >
                 {item.label}
@@ -41,43 +96,87 @@ export function Header() {
           })}
         </nav>
 
-        <div className="hidden items-center gap-2 lg:flex">
-          <a
-            href={facebook.pageUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="focus-ring rounded-md border border-teal-700 px-4 py-2 text-sm font-bold text-teal-900 transition hover:bg-teal-50"
+        <div className="flex items-center gap-2">
+          <SocialLinks tone="dark" className="hidden xl:flex" />
+          <ButtonLink
+            href={donateNavItem.href}
+            variant="gold"
+            size="sm"
+            aria-current={isCurrent(donateNavItem.href) ? "page" : undefined}
+            className="hidden lg:inline-flex"
           >
-            Follow
-          </a>
-        </div>
+            {donateNavItem.label}
+          </ButtonLink>
 
-        <button
-          type="button"
-          className="focus-ring grid h-11 w-11 place-items-center rounded-md border border-teal-900/15 text-teal-900 lg:hidden"
-          onClick={() => setOpen((value) => !value)}
-          aria-expanded={open}
-          aria-label="Toggle navigation"
-        >
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
+          <a
+            href={`tel:${site.phone.replaceAll(" ", "")}`}
+            aria-label={`Call ${site.name} on ${site.phone}`}
+            className="focus-ring grid h-11 w-11 place-items-center rounded-md border border-teal-900/15 text-teal-800 transition hover:bg-teal-50 sm:hidden"
+          >
+            <Phone size={20} aria-hidden="true" />
+          </a>
+
+          <button
+            ref={toggleRef}
+            type="button"
+            className="focus-ring grid h-11 w-11 place-items-center rounded-md border border-teal-900/15 text-teal-900 transition hover:bg-teal-50 lg:hidden"
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+            aria-controls={MENU_ID}
+            aria-label={open ? "Close menu" : "Open menu"}
+          >
+            {open ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+          </button>
+        </div>
       </div>
+
       {open ? (
-        <nav aria-label="Mobile navigation" className="border-t border-teal-900/10 bg-linen px-4 py-4 lg:hidden">
-          <div className="grid gap-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="focus-ring rounded-md px-3 py-3 text-sm font-bold text-ink hover:bg-teal-50"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        </nav>
+        <div
+          aria-hidden="true"
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 top-[var(--header-height)] z-30 bg-teal-900/35 lg:hidden"
+        />
       ) : null}
+      {/* Kept in the DOM so `aria-controls` always resolves; `hidden` removes it
+          from the accessibility tree and the tab order while collapsed. */}
+      <nav
+        id={MENU_ID}
+        aria-label="Primary"
+        hidden={!open}
+        className="relative z-40 max-h-[calc(100dvh-var(--header-height))] overflow-y-auto border-t border-teal-900/10 bg-linen px-4 pb-6 pt-4 shadow-soft lg:hidden"
+      >
+        <ButtonLink href={donateNavItem.href} variant="gold" className="w-full">
+          {donateNavItem.label}
+        </ButtonLink>
+        <ul className="mt-3 grid gap-1">
+          {primaryNavItems.map((item) => {
+            const current = isCurrent(item.href);
+            return (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  aria-current={current ? "page" : undefined}
+                  className={`focus-ring flex min-h-11 items-center rounded-md px-3 text-sm font-bold transition ${
+                    current ? "bg-teal-700 text-white" : "text-ink hover:bg-teal-50"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+        <div className="mt-4 border-t border-teal-900/10 pt-4">
+          <a
+            href={`tel:${site.phone.replaceAll(" ", "")}`}
+            className="focus-ring flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-bold text-teal-900 transition hover:bg-teal-50"
+          >
+            <Phone size={18} aria-hidden="true" className="text-teal-700" />
+            {site.phone}
+          </a>
+          <SocialLinks tone="dark" showLabels className="mt-3 px-1" />
+        </div>
+      </nav>
     </header>
   );
 }

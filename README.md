@@ -69,16 +69,68 @@ Implementation notes:
 - A separate back-to-top button appears in the lower-right corner after scrolling.
 - No page copy or content data was changed for this UX layer.
 
+## Design, Accessibility, and SEO Pass
+
+A design and accessibility pass was applied across every page. No facts, metrics,
+testimonials, partnerships, or contact details were invented; all copy is derived
+from `src/data/site.ts` and existing page content.
+
+Research applied:
+
+- WCAG 2.2 SC 2.4.13 (Focus Appearance) recommends a focus indicator at least as
+  large as a 2 CSS pixel perimeter, and lists two-colour indicators (technique
+  C40) as sufficient. The previous focus ring was gold-only and effectively
+  invisible on the light linen background, so `.focus-ring` is now a two-tone
+  gold + deep-teal ring defined in `globals.css`, with a zero-specificity
+  `:focus-visible` fallback so nothing on the site can lose its focus state.
+- WCAG 2.2 SC 2.5.8 (Target Size Minimum) asks for 24x24 CSS pixel targets;
+  interactive elements use a 44px minimum instead.
+- The WAI-ARIA disclosure navigation pattern requires `aria-expanded`,
+  `aria-controls`, Escape to close, and focus returning to the trigger. The
+  mobile menu now does all four, stays in the DOM behind the `hidden` attribute
+  so `aria-controls` always resolves, closes on route change, and locks page
+  scroll while open.
+- Nielsen Norman Group's non-profit research found mission clarity is the biggest
+  factor for donors, that only 4% of studied homepages explained how donations
+  are spent, and that 25% of homepages had no donate call to action. The homepage
+  therefore states the mission near the top, adds a "Where support goes" section
+  built from the existing donation tiers, and Donate is a standing header button.
+- Contrast was measured rather than eyeballed: `gold-600` (previously `#B97916`)
+  failed AA on white at 3.62:1 and is now `#96590C` (5.6:1), and the hero uses a
+  gradient scrim so headline text clears 4.5:1 over any photo.
+
+Structural and performance changes:
+
+- `sitemap.ts`, `robots.ts`, a `not-found.tsx` page, per-page canonical URLs, and
+  Organization/WebSite JSON-LD built only from published data.
+- A skip link, one `h1` per page, no heading-level jumps, `aria-current="page"`
+  navigation state, and section landmarks tied to their headings.
+- The Facebook SDK is no longer loaded on every page. It is injected next to the
+  timeline widget (home, news, events) via `FacebookSdk.tsx`, and the footer and
+  About page use plain social links instead of the XFBML follow button.
+- Scroll reveals moved from Framer Motion to a small IntersectionObserver, taking
+  the homepage from 149 kB to 109 kB of first-load JavaScript. Reduced-motion
+  preferences are honoured globally, and a `noscript` rule reveals every section
+  when JavaScript is unavailable.
+- Fluid heading sizes replace fixed breakpoint jumps, AVIF/WebP output and a long
+  image cache TTL are enabled, and baseline security headers are set in
+  `next.config.mjs`.
+- The contact API validates against a shared topic list, drops honeypot and
+  instant submissions, rate limits per client, and returns JSON instead of
+  crashing when SMTP delivery fails.
+
 ## Tech Stack
 
 - Next.js `14.2.35` with App Router
 - TypeScript
 - Tailwind CSS
 - Lucide React icons
-- Framer Motion for subtle section animation
 - Google Fonts via `next/font`
 - `next/image` remote image optimization
 - Nodemailer for contact-form email delivery
+
+Framer Motion is still installed but no longer imported; section reveals are
+handled by `src/components/MotionSection.tsx` using IntersectionObserver.
 
 ## Local Development
 
@@ -202,29 +254,53 @@ npx vercel --prod
 
 ```text
 src/app/                 App Router pages and root layout
+src/app/sitemap.ts       Generated sitemap.xml from the navigation list
+src/app/robots.ts        Generated robots.txt
+src/app/not-found.tsx    404 page with links to every section
 src/components/          Shared UI, navigation, Facebook widgets, contact form
 src/app/api/contact/     Contact form email API route
 src/data/site.ts         Central content, programs, team, gallery, events, links
 deploy/                  Reverse proxy and SSL deployment handoff files
-next.config.mjs          Image remote domain configuration
+next.config.mjs          Images, security headers, remote image domains
 .env.example             Public environment variable placeholders
+```
+
+Shared building blocks worth knowing before editing a page:
+
+```text
+SectionHeading.tsx       Eyebrow + heading + description used by every section
+ButtonLink.tsx           Button variants, plus buttonClasses() for plain anchors
+CtaBand.tsx              Standing give / volunteer / partner band
+SocialLinks.tsx          Facebook and LinkedIn links with no third-party script
+JsonLd.tsx               Organization and WebSite schema markup
+FacebookSdk.tsx          Facebook SDK loader and XFBML parse hook
+MotionSection.tsx        IntersectionObserver scroll reveal
 ```
 
 ## Facebook Integration Notes
 
-The site uses the Facebook JS SDK in `src/app/layout.tsx`:
+The Facebook JS SDK is loaded by `src/components/FacebookSdk.tsx`, which is
+rendered inside `FacebookEmbed` rather than in the root layout:
 
 ```tsx
 <Script
-  async
-  defer
-  crossOrigin="anonymous"
+  id="facebook-sdk"
   src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0"
-  strategy="afterInteractive"
+  strategy="lazyOnload"
+  crossOrigin="anonymous"
 />
 ```
 
-Live feed widgets are rendered through a client component loaded with `dynamic(..., { ssr: false })` to avoid hydration issues. If Facebook blocks or delays SDK rendering, the component still shows a styled fallback card with a direct Follow button.
+Only the pages that actually show the timeline (`/`, `/news`, `/events`) request
+the SDK; `next/script` de-duplicates by `id`. `useFacebookXfbml()` polls for
+`window.FB` and parses the XFBML markup as soon as it is available, replacing a
+fixed 600 ms delay that failed on slow connections. The `#fb-root` element stays
+in the root layout.
+
+Live feed widgets are rendered through a client component loaded with
+`dynamic(..., { ssr: false })` to avoid hydration issues. If Facebook is blocked
+or slow, the widget shows inline fallback text and the panel below it still
+provides a direct link to the page.
 
 ## Main Pages
 
@@ -246,3 +322,10 @@ Run:
 npm run lint
 npm run build
 ```
+
+Caution: while the production server is running from this directory (see
+"Current Server Deployment"), `npm run build` overwrites the `.next` directory it
+is serving from, which can break the live site until the process is restarted. To
+verify a build without touching the running site, copy `src` and the config files
+to a scratch directory, symlink `node_modules` and `public` into it, and build
+there.

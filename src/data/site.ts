@@ -1,6 +1,8 @@
 import {
   BookOpen,
+  HandCoins,
   HandHeart,
+  Handshake,
   HeartPulse,
   Leaf,
   ShieldCheck,
@@ -9,6 +11,9 @@ import {
 } from "lucide-react";
 
 const asset = (path: string) => `/uploads/foun/${path.replace(/^images\//, "")}`;
+
+/** Canonical origin, shared by metadata, sitemap, robots, and schema markup. */
+export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://ftnbridge.org").replace(/\/$/, "");
 
 export const facebook = {
   handle: "fountainbridge1",
@@ -38,6 +43,16 @@ export const site = {
   mapQuery: "Fountain Bridge Buea Cameroon",
   mapEmbedUrl:
     "https://www.google.com/maps?q=Fountain%20Bridge%20Buea%20Cameroon&output=embed",
+  mapLinkUrl:
+    "https://www.google.com/maps/search/?api=1&query=Fountain%20Bridge%20Buea%20Cameroon",
+  // Structured form of `location`, used for the organization schema markup.
+  address: {
+    street: "Mile 16",
+    locality: "Buea",
+    region: "South West Region",
+    country: "Cameroon",
+    countryCode: "CM",
+  },
   phone: "+237 672 073 459",
   emails: ["fountainbridge21@gmail.com", "lengouhhilda@gmail.com"],
   summary:
@@ -69,6 +84,9 @@ export const site = {
   donationHelpContact: "+237 672 073 459",
 };
 
+/** Click-to-chat link for the public organisation number. */
+export const whatsappUrl = `https://wa.me/${site.phone.replace(/\D/g, "")}`;
+
 export const navItems = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
@@ -81,11 +99,54 @@ export const navItems = [
   { href: "/donate", label: "Donate" },
 ];
 
+// The donate route is promoted to a standing call to action in the header, so
+// the inline link row renders every other destination.
+export const primaryNavItems = navItems.filter((item) => item.href !== "/donate");
+
+export const donateNavItem = navItems.find((item) => item.href === "/donate")!;
+
 export const proofStats = [
   { value: "500+", label: "children supported" },
   { value: "25", label: "communities reached" },
   { value: "40", label: "volunteers mobilized" },
   { value: "2022", label: "formal nonprofit start" },
+];
+
+// Single source of truth for the contact form options and the API validation.
+export const contactTopics = [
+  "Volunteer application",
+  "Donation support",
+  "Partnership inquiry",
+  "Media request",
+  "Beneficiary referral",
+] as const;
+
+// Three routes into the work, mirroring the topics the contact form accepts.
+export const waysToHelp = [
+  {
+    title: "Give",
+    description:
+      "Fund school materials, outreach logistics, emergency support, training sessions, and community events.",
+    href: "/donate",
+    action: "See how giving works",
+    icon: HandCoins,
+  },
+  {
+    title: "Volunteer",
+    description:
+      "Join field outreach, health education, mentoring, fundraising support, or media and documentation work.",
+    href: "/contact",
+    action: "Send a volunteer request",
+    icon: HandHeart,
+  },
+  {
+    title: "Partner",
+    description:
+      "Work with us as a school, health facility, council, faith-based group, sponsor, or technical partner.",
+    href: "/contact",
+    action: "Start a partnership inquiry",
+    icon: Handshake,
+  },
 ];
 
 export const partners = [
@@ -210,6 +271,7 @@ export const projects = [
     status: "Ongoing",
     target: "200 children",
     progress: "60% funded or XAF 1,200,000 raised",
+    progressPercent: 60,
     summary:
       "Provides books, uniforms, fee support, and mentoring for children at risk of dropping out.",
     image: asset("images/projects-projects-0-image/1782460648793-d050daa3-5e37-4f61-afd1-fd281b934a98.jpg"),
