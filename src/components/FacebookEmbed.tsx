@@ -31,18 +31,19 @@ export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
           window.__fountainBridgeFacebookInitialized = true;
         }
         window.FB.XFBML.parse(widgetRef.current?.parentElement ?? undefined);
-        return true;
       }
-      return false;
-    };
 
-    if (parse()) return;
+      return Boolean(widgetRef.current?.querySelector("iframe"));
+    };
 
     const timer = window.setInterval(() => {
       attempts += 1;
-      if (parse() || attempts >= MAX_ATTEMPTS) window.clearInterval(timer);
+      if (parse() || attempts >= MAX_ATTEMPTS) {
+        window.clearInterval(timer);
+      }
     }, POLL_INTERVAL_MS);
 
+    parse();
     return () => window.clearInterval(timer);
   }, []);
 
