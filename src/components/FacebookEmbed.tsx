@@ -1,16 +1,43 @@
 "use client";
 
 import { Share2 } from "lucide-react";
+import { useEffect } from "react";
 import { buttonClasses } from "@/components/ButtonLink";
-import { FacebookSdk, useFacebookXfbml } from "@/components/FacebookSdk";
 import { facebook, site } from "@/data/site";
 
+declare global {
+  interface Window {
+    FB?: { XFBML?: { parse: () => void } };
+  }
+}
+
+const POLL_INTERVAL_MS = 250;
+const MAX_ATTEMPTS = 40;
+
 export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
-  useFacebookXfbml();
+  useEffect(() => {
+    let attempts = 0;
+
+    const parse = () => {
+      if (window.FB?.XFBML?.parse) {
+        window.FB.XFBML.parse();
+        return true;
+      }
+      return false;
+    };
+
+    if (parse()) return;
+
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      if (parse() || attempts >= MAX_ATTEMPTS) window.clearInterval(timer);
+    }, POLL_INTERVAL_MS);
+
+    return () => window.clearInterval(timer);
+  }, []);
 
   return (
     <div className="overflow-hidden rounded-lg border border-teal-900/10 bg-white shadow-card">
-      <FacebookSdk />
       <div
         role="region"
         aria-label={`${site.name} Facebook timeline`}
