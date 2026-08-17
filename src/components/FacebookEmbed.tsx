@@ -56,10 +56,9 @@ export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
           data-show-facepile="true"
         >
           <blockquote cite={facebook.pageUrl} className="fb-xfbml-parse-ignore p-5">
-            <p className="text-sm leading-6 text-muted">
-              The live Facebook timeline loads here. If it does not appear, your browser or network may be
-              blocking Facebook content.
-            </p>
+            <a href={facebook.pageUrl} className="text-sm leading-6 text-muted">
+              View Fountain Bridge on Facebook.
+            </a>
           </blockquote>
         </div>
       </div>
