@@ -1,26 +1,21 @@
 "use client";
 
 import { Share2 } from "lucide-react";
+import { useEffect } from "react";
 import { buttonClasses } from "@/components/ButtonLink";
 import { facebook, site } from "@/data/site";
 
-function getFacebookPluginUrl(height: number) {
-  const url = new URL("https://www.facebook.com/plugins/page.php");
-  url.search = new URLSearchParams({
-    href: facebook.pageUrl,
-    tabs: "timeline,events",
-    width: "500",
-    height: String(height),
-    small_header: "false",
-    adapt_container_width: "true",
-    hide_cover: "false",
-    show_facepile: "true",
-  }).toString();
-  return url.toString();
+declare global {
+  interface Window {
+    FB?: { XFBML?: { parse: () => void } };
+  }
 }
 
 export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
-  const height = compact ? 420 : 600;
+  useEffect(() => {
+    const timer = window.setTimeout(() => window.FB?.XFBML?.parse(), 600);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   return (
     <div className="overflow-hidden rounded-lg border border-teal-900/10 bg-white shadow-card">
@@ -28,18 +23,18 @@ export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
         role="region"
         aria-label={`${site.name} Facebook timeline`}
         className="bg-mist/60"
-        style={{ minHeight: height }}
+        style={{ minHeight: compact ? 420 : 600 }}
       >
-        <iframe
-          src={getFacebookPluginUrl(height)}
-          title={`${site.name} Facebook timeline`}
-          className="block w-full"
-          style={{ border: "none", minHeight: height }}
-          width="500"
-          height={height}
-          scrolling="no"
-          allow="encrypted-media"
-          allowFullScreen
+        <div
+          className="fb-page"
+          data-href={facebook.pageUrl}
+          data-tabs="timeline,events"
+          data-width="500"
+          data-height={compact ? "420" : "600"}
+          data-small-header="false"
+          data-adapt-container-width="true"
+          data-hide-cover="false"
+          data-show-facepile="true"
         />
       </div>
       <div className="border-t border-teal-900/10 bg-mist p-5 sm:p-6">

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
@@ -87,6 +88,14 @@ export default function RootLayout({
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
+        <div id="fb-root" />
+        <Script
+          async
+          defer
+          crossOrigin="anonymous"
+          src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0"
+          strategy="afterInteractive"
+        />
         <Header />
         <main id="main-content" tabIndex={-1}>
           {children}
