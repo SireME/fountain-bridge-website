@@ -1,51 +1,26 @@
 "use client";
 
 import { Share2 } from "lucide-react";
-import { useEffect, useRef } from "react";
 import { buttonClasses } from "@/components/ButtonLink";
 import { facebook, site } from "@/data/site";
 
-declare global {
-  interface Window {
-    FB?: {
-      init: (options: { version: string; xfbml?: boolean }) => void;
-      XFBML?: { parse: (element?: Element) => void };
-    };
-    __fountainBridgeFacebookInitialized?: boolean;
-  }
+function getFacebookPluginUrl(height: number) {
+  const url = new URL("https://www.facebook.com/plugins/page.php");
+  url.search = new URLSearchParams({
+    href: facebook.pageUrl,
+    tabs: "timeline,events",
+    width: "500",
+    height: String(height),
+    small_header: "false",
+    adapt_container_width: "true",
+    hide_cover: "false",
+    show_facepile: "true",
+  }).toString();
+  return url.toString();
 }
 
-const POLL_INTERVAL_MS = 250;
-const MAX_ATTEMPTS = 40;
-
 export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
-  const widgetRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let attempts = 0;
-
-    const parse = () => {
-      if (window.FB?.XFBML?.parse) {
-        if (!window.__fountainBridgeFacebookInitialized) {
-          window.FB.init({ version: "v19.0", xfbml: true });
-          window.__fountainBridgeFacebookInitialized = true;
-        }
-        window.FB.XFBML.parse(widgetRef.current?.parentElement ?? undefined);
-      }
-
-      return Boolean(widgetRef.current?.querySelector("iframe"));
-    };
-
-    const timer = window.setInterval(() => {
-      attempts += 1;
-      if (parse() || attempts >= MAX_ATTEMPTS) {
-        window.clearInterval(timer);
-      }
-    }, POLL_INTERVAL_MS);
-
-    parse();
-    return () => window.clearInterval(timer);
-  }, []);
+  const height = compact ? 420 : 600;
 
   return (
     <div className="overflow-hidden rounded-lg border border-teal-900/10 bg-white shadow-card">
@@ -53,26 +28,19 @@ export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
         role="region"
         aria-label={`${site.name} Facebook timeline`}
         className="bg-mist/60"
-        style={{ minHeight: compact ? 420 : 600 }}
+        style={{ minHeight: height }}
       >
-        <div
-          ref={widgetRef}
-          className="fb-page"
-          data-href={facebook.pageUrl}
-          data-tabs="timeline,events"
-          data-width="500"
-          data-height={compact ? "420" : "600"}
-          data-small-header="false"
-          data-adapt-container-width="true"
-          data-hide-cover="false"
-          data-show-facepile="true"
-        >
-          <blockquote cite={facebook.pageUrl} className="fb-xfbml-parse-ignore p-5">
-            <a href={facebook.pageUrl} className="text-sm leading-6 text-muted">
-              View Fountain Bridge on Facebook.
-            </a>
-          </blockquote>
-        </div>
+        <iframe
+          src={getFacebookPluginUrl(height)}
+          title={`${site.name} Facebook timeline`}
+          className="block w-full"
+          style={{ border: "none", minHeight: height }}
+          width="500"
+          height={height}
+          scrolling="no"
+          allow="encrypted-media"
+          allowFullScreen
+        />
       </div>
       <div className="border-t border-teal-900/10 bg-mist p-5 sm:p-6">
         <div className="flex items-start gap-3">
