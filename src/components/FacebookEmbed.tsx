@@ -1,13 +1,17 @@
 "use client";
 
 import { Share2 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { buttonClasses } from "@/components/ButtonLink";
 import { facebook, site } from "@/data/site";
 
 declare global {
   interface Window {
-    FB?: { XFBML?: { parse: () => void } };
+    FB?: {
+      init: (options: { version: string; xfbml?: boolean }) => void;
+      XFBML?: { parse: (element?: Element) => void };
+    };
+    __fountainBridgeFacebookInitialized?: boolean;
   }
 }
 
@@ -15,12 +19,18 @@ const POLL_INTERVAL_MS = 250;
 const MAX_ATTEMPTS = 40;
 
 export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
+  const widgetRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     let attempts = 0;
 
     const parse = () => {
       if (window.FB?.XFBML?.parse) {
-        window.FB.XFBML.parse();
+        if (!window.__fountainBridgeFacebookInitialized) {
+          window.FB.init({ version: "v19.0", xfbml: false });
+          window.__fountainBridgeFacebookInitialized = true;
+        }
+        window.FB.XFBML.parse(widgetRef.current?.parentElement ?? undefined);
         return true;
       }
       return false;
@@ -45,6 +55,7 @@ export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
         style={{ minHeight: compact ? 420 : 600 }}
       >
         <div
+          ref={widgetRef}
           className="fb-page"
           data-href={facebook.pageUrl}
           data-tabs="timeline,events"
