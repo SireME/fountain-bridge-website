@@ -27,7 +27,7 @@ export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
     const parse = () => {
       if (window.FB?.XFBML?.parse) {
         if (!window.__fountainBridgeFacebookInitialized) {
-          window.FB.init({ version: "v19.0", xfbml: false });
+          window.FB.init({ version: "v19.0", xfbml: true });
           window.__fountainBridgeFacebookInitialized = true;
         }
         window.FB.XFBML.parse(widgetRef.current?.parentElement ?? undefined);
