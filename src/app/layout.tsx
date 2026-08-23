@@ -81,9 +81,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${merriweather.variable}`}>
       <body>
-        {/* Scroll-reveal sections start transparent; without JS they must not stay hidden. */}
+        {/* Scroll-reveal sections and their staggered children start
+            transparent; without JS they must not stay hidden. */}
         <noscript>
-          <style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style>
+          <style>{`[data-reveal],[data-reveal-item]{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
         <a href="#main-content" className="skip-link">
           Skip to main content

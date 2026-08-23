@@ -1,6 +1,9 @@
+import { ArrowRight } from "lucide-react";
 import { buttonClasses } from "@/components/ButtonLink";
 import { CtaBand } from "@/components/CtaBand";
 import { LoadingImage } from "@/components/LoadingImage";
+import { MotionSection } from "@/components/MotionSection";
+import { revealItem } from "@/components/reveal";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { facebook, gallery, site } from "@/data/site";
@@ -24,7 +27,7 @@ export default function GalleryPage() {
         secondaryCtaLabel="Support this work"
       />
 
-      <section aria-labelledby="record-title" className="section-pad">
+      <MotionSection labelledBy="record-title" className="section-pad">
         <div className="section-shell">
           <SectionHeading
             id="record-title"
@@ -32,32 +35,46 @@ export default function GalleryPage() {
             title="Documented outreach, program by program."
             description="Every photo below comes from Fountain Bridge program activity, outreach visits, and community support work."
           />
-          <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {gallery.map((item, index) => (
-              <li key={item.title}>
-                <figure className="flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-card ring-1 ring-teal-900/5">
-                  <div className="relative h-64 overflow-hidden sm:h-72">
+              <li key={item.title} {...revealItem(index)}>
+                <figure className="group card card-interactive card-rule flex h-full flex-col overflow-hidden">
+                  <div className="media-frame h-64 sm:h-72">
                     <LoadingImage
                       src={item.image}
                       alt={item.title}
                       fill
                       loading={index < 3 ? "eager" : "lazy"}
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition duration-500 hover:scale-105"
+                      className="media-zoom object-cover"
                     />
+                    {/* Plate number, the way a printed photo essay captions its
+                        images. Decorative: the caption below carries the text. */}
+                    <span
+                      aria-hidden="true"
+                      className="section-index absolute left-4 top-4 grid h-9 w-9 place-items-center rounded-md bg-teal-900/85 text-gold-400 backdrop-blur"
+                    >
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
                   </div>
-                  <figcaption className="flex-1 p-5">
+                  <figcaption className="flex-1 p-5 sm:p-6">
                     <h3 className="font-serif text-lg font-black leading-7 text-teal-900">{item.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-muted">{item.caption}</p>
+                    <p className="mt-2.5 text-sm leading-6 text-muted">{item.caption}</p>
                   </figcaption>
                 </figure>
               </li>
             ))}
           </ul>
 
-          <div className="mt-10 rounded-lg bg-teal-900 p-7 text-white sm:p-8">
-            <h2 className="font-serif text-heading font-black">More photos are posted as we go</h2>
-            <p className="mt-4 max-w-measure leading-8 text-white/85">
+          <div className="grain relative mt-12 overflow-hidden rounded-lg bg-teal-900 p-7 text-white sm:p-9">
+            <div
+              aria-hidden="true"
+              className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-400/60 to-transparent"
+            />
+            <h2 className="relative z-10 font-serif text-heading font-black">
+              More photos are posted as we go
+            </h2>
+            <p className="relative z-10 mt-4 max-w-measure leading-8 text-white/85">
               Visit the public Facebook page for field photos, outreach albums, videos, and day-to-day program
               activity from {site.name}.
             </p>
@@ -65,14 +82,15 @@ export default function GalleryPage() {
               href={facebook.pageUrl}
               target="_blank"
               rel="noreferrer"
-              className={buttonClasses({ variant: "light", className: "mt-6" })}
+              className={buttonClasses({ variant: "light", className: "relative z-10 mt-7" })}
             >
               View Facebook photos
+              <ArrowRight size={18} aria-hidden="true" />
               <span className="sr-only">(opens in a new tab)</span>
             </a>
           </div>
         </div>
-      </section>
+      </MotionSection>
 
       <CtaBand />
     </>

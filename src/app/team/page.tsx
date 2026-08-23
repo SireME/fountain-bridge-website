@@ -1,5 +1,7 @@
 import { CtaBand } from "@/components/CtaBand";
 import { LoadingImage } from "@/components/LoadingImage";
+import { MotionSection } from "@/components/MotionSection";
+import { revealItem } from "@/components/reveal";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { team } from "@/data/site";
@@ -28,30 +30,33 @@ export default function TeamPage() {
         ctaLabel="Contact the team"
       />
 
-      <section aria-labelledby="team-title" className="section-pad">
+      <MotionSection labelledBy="team-title" className="section-pad">
         <div className="section-shell">
           <SectionHeading
             id="team-title"
             eyebrow="Who leads the work"
             title="The people accountable for every program."
           />
-          <ul className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {team.map((member) => (
+          <ul className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {team.map((member, index) => (
               <li
                 key={member.name}
-                className="flex flex-col overflow-hidden rounded-lg bg-white shadow-card ring-1 ring-teal-900/5"
+                {...revealItem(index)}
+                className="group card card-interactive card-rule flex flex-col overflow-hidden"
               >
                 {member.photo ? (
-                  <div className="relative h-72 sm:h-80">
+                  <div className="media-frame h-72 sm:h-80">
                     <LoadingImage
                       src={member.photo}
                       alt={`Portrait of ${member.name}`}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover"
+                      className="media-zoom object-cover"
                     />
                   </div>
                 ) : (
+                  /* No portrait on file: a monogram plate rather than a stock
+                     silhouette, so the card still reads as a person. */
                   <div
                     aria-hidden="true"
                     className={`grid h-72 place-items-center sm:h-80 ${
@@ -61,7 +66,7 @@ export default function TeamPage() {
                     }`}
                   >
                     <span
-                      className={`grid h-28 w-28 place-items-center rounded-full font-serif text-4xl font-black ring-4 ${
+                      className={`grid h-28 w-28 place-items-center rounded-full font-serif text-4xl font-black ring-4 transition duration-300 group-hover:scale-105 ${
                         member.character === "male"
                           ? "bg-teal-900/40 text-gold-100 ring-white/25"
                           : "bg-white text-teal-800 ring-teal-900/10"
@@ -71,18 +76,17 @@ export default function TeamPage() {
                     </span>
                   </div>
                 )}
-                <div className="flex flex-1 flex-col p-6">
+                <div className="flex flex-1 flex-col p-6 sm:p-7">
                   <h3 className="font-serif text-subheading font-black text-teal-900">{member.name}</h3>
-                  <p className="mt-2 text-sm font-black uppercase tracking-[0.12em] text-gold-600">
-                    {member.role}
-                  </p>
-                  <p className="mt-4 leading-7 text-muted">{member.bio}</p>
+                  <p className="eyebrow mt-2.5 text-gold-600">{member.role}</p>
+                  <div aria-hidden="true" className="mt-5 h-px w-10 bg-teal-900/15" />
+                  <p className="mt-5 leading-7 text-muted">{member.bio}</p>
                 </div>
               </li>
             ))}
           </ul>
 
-          <div className="mt-10 rounded-lg bg-mist p-7 sm:p-8">
+          <div className="card-sunken mt-12 p-7 sm:p-9">
             <h2 className="font-serif text-heading font-black text-teal-900">Join the work</h2>
             <p className="mt-4 max-w-measure leading-8 text-muted">
               Fountain Bridge welcomes field volunteers, health educators, fundraising support, media volunteers,
@@ -91,7 +95,7 @@ export default function TeamPage() {
             </p>
           </div>
         </div>
-      </section>
+      </MotionSection>
 
       <CtaBand
         title="Bring your skills to a community program."

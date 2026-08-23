@@ -11,19 +11,20 @@ export const FacebookFeed = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div
-        className="rounded-lg border border-teal-900/10 bg-white p-6 shadow-card"
-        style={{ minHeight: 480 }}
-      >
-        <p className="font-serif text-lg font-black text-teal-900">Stay connected</p>
+      <div className="card p-6 sm:p-7" style={{ minHeight: 480 }}>
+        <p className="eyebrow text-gold-600">
+          <span aria-hidden="true" className="eyebrow-rule" />
+          Facebook
+        </p>
+        <p className="mt-3 font-serif text-lg font-black text-teal-900">Stay connected</p>
         <p className="mt-2 text-sm leading-6 text-muted" role="status">
           Loading the Facebook timeline…
         </p>
         <div aria-hidden="true" className="mt-6 space-y-3">
-          <div className="h-4 w-2/3 rounded-md bg-mist" />
-          <div className="h-4 w-full rounded-md bg-mist" />
-          <div className="h-4 w-5/6 rounded-md bg-mist" />
-          <div className="h-44 w-full rounded-md bg-mist" />
+          <div className="h-4 w-2/3 animate-pulse rounded-md bg-mist" />
+          <div className="h-4 w-full animate-pulse rounded-md bg-mist" />
+          <div className="h-4 w-5/6 animate-pulse rounded-md bg-mist" />
+          <div className="h-44 w-full animate-pulse rounded-md bg-mist" />
         </div>
       </div>
     ),

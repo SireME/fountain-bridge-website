@@ -16,6 +16,10 @@ type SectionHeadingProps = {
 /**
  * One heading treatment for every section so the page hierarchy stays legible:
  * eyebrow (context) -> heading (claim) -> description (detail).
+ *
+ * The eyebrow carries a short rule and a gold tick before the label. That mark
+ * repeats on the hero, the page heroes, and the CTA band, and it is the cue
+ * that tells a reader "a new part of the argument starts here".
  */
 export function SectionHeading({
   eyebrow,
@@ -29,37 +33,34 @@ export function SectionHeading({
   className = "",
 }: SectionHeadingProps) {
   const centered = align === "center";
+  const light = tone === "light";
 
   return (
     <div
-      className={`flex flex-col gap-5 ${
-        action ? "sm:flex-row sm:items-end sm:justify-between" : ""
+      className={`flex flex-col gap-6 ${
+        action ? "sm:flex-row sm:items-end sm:justify-between sm:gap-8" : ""
       } ${centered ? "items-center text-center" : ""} ${className}`.trim()}
     >
       <div className={centered ? "max-w-measure" : "max-w-2xl"}>
         {eyebrow ? (
           <p
-            className={`flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] sm:text-sm ${
-              centered ? "justify-center" : ""
-            } ${tone === "light" ? "text-gold-400" : "text-gold-600"}`}
+            className={`eyebrow ${centered ? "justify-center" : ""} ${
+              light ? "text-gold-400" : "text-gold-600"
+            }`}
           >
-            <span aria-hidden="true" className="h-px w-6 shrink-0 bg-current" />
+            <span aria-hidden="true" className="eyebrow-rule" />
             {eyebrow}
           </p>
         ) : null}
         <Heading
           id={id}
-          className={`mt-3 font-serif text-heading font-black ${
-            tone === "light" ? "text-white" : "text-teal-900"
-          }`}
+          className={`mt-4 font-serif text-heading font-black ${light ? "text-white" : "text-teal-900"}`}
         >
           {title}
         </Heading>
         {description ? (
           <p
-            className={`mt-4 max-w-measure text-lead ${
-              tone === "light" ? "text-white/85" : "text-muted"
-            }`}
+            className={`mt-5 max-w-measure text-lead ${light ? "text-white/85" : "text-muted"}`}
           >
             {description}
           </p>

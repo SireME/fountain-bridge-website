@@ -1,7 +1,9 @@
-import { BadgeCheck, Users } from "lucide-react";
+import { ArrowRight, BadgeCheck, Users } from "lucide-react";
 import { buttonClasses } from "@/components/ButtonLink";
 import { CtaBand } from "@/components/CtaBand";
 import { LoadingImage } from "@/components/LoadingImage";
+import { MotionSection } from "@/components/MotionSection";
+import { revealItem } from "@/components/reveal";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { SocialLinks } from "@/components/SocialLinks";
@@ -26,17 +28,21 @@ export default function AboutPage() {
         secondaryCtaLabel="Talk to the team"
       />
 
-      <section aria-labelledby="story-title" className="section-pad">
+      <MotionSection labelledBy="story-title" className="section-pad">
         <div className="section-shell grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
-          <div className="rounded-lg bg-white p-7 shadow-card">
-            <h2 id="story-title" className="text-sm font-black uppercase tracking-[0.14em] text-gold-600">
+          {/* The founding year set at display scale: the one number that anchors
+              everything else on this page. */}
+          <div className="card p-7 sm:p-8" {...revealItem(0)}>
+            <h2 id="story-title" className="eyebrow text-gold-600">
+              <span aria-hidden="true" className="eyebrow-rule" />
               Founded
             </h2>
-            <p className="mt-2 font-serif text-display font-black leading-none text-teal-900">{site.founded}</p>
-            <p className="mt-6 leading-8 text-muted">
+            <p className="stat-figure mt-3 text-display">{site.founded}</p>
+            <div aria-hidden="true" className="mt-7 h-px w-full bg-teal-900/10" />
+            <p className="mt-7 leading-8 text-muted">
               {site.aboutIntro} {site.history} {site.whereWeWork}
             </p>
-            <dl className="mt-6 grid gap-4 border-t border-teal-900/10 pt-6 text-sm">
+            <dl className="mt-7 grid gap-4 border-t border-teal-900/10 pt-7 text-sm">
               <div>
                 <dt className="font-black text-teal-900">Organization type</dt>
                 <dd className="mt-1 text-muted">{site.type}</dd>
@@ -48,19 +54,32 @@ export default function AboutPage() {
             </dl>
           </div>
           <div className="grid gap-5">
-            <article className="rounded-lg bg-white p-7 shadow-card sm:p-8">
-              <h2 className="font-serif text-heading font-black text-teal-900">Mission</h2>
-              <p className="mt-4 text-lead text-muted">{site.mission}</p>
+            <article className="card p-7 sm:p-8" {...revealItem(1)}>
+              <h2 className="eyebrow text-gold-600">
+                <span aria-hidden="true" className="eyebrow-rule" />
+                Mission
+              </h2>
+              <p className="mt-4 font-serif text-subheading font-black leading-snug text-teal-900">
+                {site.mission}
+              </p>
             </article>
-            <article className="rounded-lg border-l-4 border-gold-400 bg-mist p-7 sm:p-8">
-              <h2 className="font-serif text-heading font-black text-teal-900">Vision</h2>
-              <p className="mt-4 text-lead text-muted">{site.vision}</p>
+            <article
+              className="card-sunken border-l-4 border-l-gold-400 p-7 sm:p-8"
+              {...revealItem(2)}
+            >
+              <h2 className="eyebrow text-gold-600">
+                <span aria-hidden="true" className="eyebrow-rule" />
+                Vision
+              </h2>
+              <p className="mt-4 font-serif text-subheading font-black leading-snug text-teal-900">
+                {site.vision}
+              </p>
             </article>
           </div>
         </div>
-      </section>
+      </MotionSection>
 
-      <section aria-labelledby="values-title" className="bg-white section-pad">
+      <MotionSection labelledBy="values-title" className="bg-white section-pad">
         <div className="section-shell">
           <SectionHeading
             id="values-title"
@@ -68,22 +87,27 @@ export default function AboutPage() {
             title="Values we can be held to."
             description="These five commitments decide how programs are designed, documented, and reported."
           />
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {site.values.map((value) => (
+          <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+            {site.values.map((value, index) => (
               <li
                 key={value}
-                className="flex items-center gap-3 rounded-lg bg-mist p-5 font-bold text-teal-900 lg:flex-col lg:text-center"
+                {...revealItem(index)}
+                className="group card-sunken flex items-center gap-3 p-5 font-bold text-teal-900 transition duration-300 ease-out hover:-translate-y-1 hover:border-gold-400/70 hover:bg-white hover:shadow-card lg:flex-col lg:gap-4 lg:py-7 lg:text-center"
               >
-                <BadgeCheck className="shrink-0 text-teal-700" size={22} aria-hidden="true" />
+                <BadgeCheck
+                  className="shrink-0 text-teal-700 transition duration-300 group-hover:text-gold-600"
+                  size={24}
+                  aria-hidden="true"
+                />
                 {value}
               </li>
             ))}
           </ul>
         </div>
-      </section>
+      </MotionSection>
 
-      <section aria-labelledby="serve-title" className="section-pad">
-        <div className="section-shell grid gap-10 lg:grid-cols-2 lg:gap-14">
+      <MotionSection labelledBy="serve-title" className="section-pad">
+        <div className="section-shell grid gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
             <SectionHeading
               id="serve-title"
@@ -91,11 +115,12 @@ export default function AboutPage() {
               title="People whose wellbeing depends on someone showing up."
               description="The organization prioritizes people whose wellbeing is shaped by poverty, lack of health information, limited access to quality healthcare, educational exclusion, age-related vulnerability, and social marginalization."
             />
-            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-              {site.audiences.map((audience) => (
+            <ul className="mt-9 grid gap-3 sm:grid-cols-2">
+              {site.audiences.map((audience, index) => (
                 <li
                   key={audience}
-                  className="flex items-center gap-3 rounded-md border border-teal-900/10 bg-white px-4 py-3 font-semibold text-teal-900 shadow-card"
+                  {...revealItem(index)}
+                  className="card flex items-center gap-3 px-4 py-3.5 font-semibold text-teal-900 transition duration-300 ease-out hover:-translate-y-0.5 hover:border-gold-400/70 hover:shadow-soft"
                 >
                   <Users size={18} className="shrink-0 text-teal-700" aria-hidden="true" />
                   {audience}
@@ -109,56 +134,66 @@ export default function AboutPage() {
               title="Local institutions make the work possible."
               description="Programs are delivered alongside the people and institutions already trusted in each community."
             />
-            <ul className="mt-8 flex flex-wrap gap-2">
-              {partners.map((partner) => (
+            <ul className="mt-9 flex flex-wrap gap-2.5">
+              {partners.map((partner, index) => (
                 <li
                   key={partner}
-                  className="rounded-md border border-teal-900/10 bg-mist px-4 py-2 text-sm font-semibold text-teal-900"
+                  {...revealItem(index)}
+                  className="rounded-full border border-teal-900/10 bg-mist px-4 py-2 text-sm font-semibold text-teal-900 transition duration-300 hover:border-gold-400/70 hover:bg-white"
                 >
                   {partner}
                 </li>
               ))}
             </ul>
-            <div className="mt-8 rounded-lg bg-teal-900 p-7 text-white">
-              <h3 className="font-serif text-subheading font-black">Follow the work live.</h3>
-              <p className="mt-3 leading-7 text-white/80">
+            <div className="grain relative mt-9 overflow-hidden rounded-lg bg-teal-900 p-7 text-white sm:p-8">
+              <div
+                aria-hidden="true"
+                className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold-400/60 to-transparent"
+              />
+              <h3 className="relative z-10 font-serif text-subheading font-black">Follow the work live.</h3>
+              <p className="relative z-10 mt-3 leading-7 text-white/80">
                 Facebook is the active public channel for {site.name} field updates, posts, photos, and events.
               </p>
-              <SocialLinks tone="light" showLabels className="mt-5" />
+              <SocialLinks tone="light" showLabels className="relative z-10 mt-6" />
               <a
                 href={facebook.pageUrl}
                 target="_blank"
                 rel="noreferrer"
-                className={buttonClasses({ variant: "light", className: "mt-5" })}
+                className={buttonClasses({ variant: "light", className: "relative z-10 mt-5" })}
               >
                 Open the Facebook page
+                <ArrowRight size={18} aria-hidden="true" />
                 <span className="sr-only">(opens in a new tab)</span>
               </a>
             </div>
           </div>
         </div>
-      </section>
+      </MotionSection>
 
-      <section aria-labelledby="recognition-title" className="bg-white section-pad">
+      <MotionSection labelledBy="recognition-title" className="bg-white section-pad">
         <div className="section-shell">
           <SectionHeading
             id="recognition-title"
             eyebrow="Recognition and milestones"
             title="Work that has been documented and recognized."
           />
-          <ul className="mt-10 grid gap-6 md:grid-cols-2">
-            {achievements.map((item) => (
-              <li key={item.title} className="flex flex-col overflow-hidden rounded-lg bg-linen shadow-card">
-                <div className="relative h-56 sm:h-64">
+          <ul className="mt-12 grid gap-6 md:grid-cols-2">
+            {achievements.map((item, index) => (
+              <li
+                key={item.title}
+                {...revealItem(index)}
+                className="group card card-interactive card-rule flex flex-col overflow-hidden bg-linen"
+              >
+                <div className="media-frame h-56 sm:h-64">
                   <LoadingImage
                     src={item.image}
                     alt={item.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover"
+                    className="media-zoom object-cover"
                   />
                 </div>
-                <div className="flex-1 p-6">
+                <div className="flex-1 p-6 sm:p-7">
                   <h3 className="font-serif text-subheading font-black text-teal-900">{item.title}</h3>
                   <p className="mt-3 leading-7 text-muted">{item.summary}</p>
                 </div>
@@ -166,7 +201,7 @@ export default function AboutPage() {
             ))}
           </ul>
         </div>
-      </section>
+      </MotionSection>
 
       <CtaBand />
     </>

@@ -20,6 +20,9 @@ type MotionSectionProps = {
  * reduced-motion rule in `globals.css` collapses the transition, and the
  * `data-reveal` hook lets the no-JS stylesheet in the root layout reveal
  * everything unconditionally.
+ *
+ * Descendants marked with `revealItem(index)` from `./reveal` fade in one after
+ * another once the section itself has been revealed.
  */
 export function MotionSection({ children, className = "", id, labelledBy }: MotionSectionProps) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -54,6 +57,7 @@ export function MotionSection({ children, className = "", id, labelledBy }: Moti
       id={id}
       aria-labelledby={labelledBy}
       data-reveal=""
+      data-revealed={revealed ? "true" : "false"}
       className={`transition-[opacity,transform] duration-500 ease-out ${
         revealed ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0 motion-reduce:translate-y-0"
       } ${className}`.trim()}

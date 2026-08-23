@@ -13,6 +13,7 @@ const MENU_ID = "primary-navigation";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const toggleRef = useRef<HTMLButtonElement>(null);
 
@@ -20,6 +21,16 @@ export function Header() {
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
+
+  // The bar sits on a linen page, so at the top it should read as part of the
+  // page. Once content scrolls under it, it earns a border and a shadow.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Escape closes the disclosure and returns focus to the button that opened it
   // (WAI-ARIA disclosure navigation pattern).
@@ -51,14 +62,20 @@ export function Header() {
   const isCurrent = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
-    <header className="sticky top-0 z-50 border-b border-teal-900/10 bg-linen/95 backdrop-blur">
+    <header
+      className={`sticky top-0 z-50 border-b transition-[background-color,border-color,box-shadow] duration-300 ${
+        scrolled || open
+          ? "border-teal-900/10 bg-linen/95 shadow-[0_10px_30px_-18px_rgba(7,59,50,0.55)] backdrop-blur"
+          : "border-transparent bg-linen"
+      }`}
+    >
       <div className="section-shell flex h-[var(--header-height)] items-center justify-between gap-3">
         <Link
           href="/"
           aria-label={`${site.name} — home`}
-          className="focus-ring flex min-w-0 items-center gap-2 rounded-md sm:gap-3"
+          className="focus-ring group flex min-w-0 items-center gap-2 rounded-md sm:gap-3"
         >
-          <span className="relative h-10 w-24 shrink-0 overflow-hidden rounded-md bg-white shadow-sm ring-1 ring-teal-900/10 sm:h-12 sm:w-40 lg:w-36 xl:w-44">
+          <span className="relative h-10 w-24 shrink-0 overflow-hidden rounded-md bg-white shadow-sm ring-1 ring-teal-900/10 transition duration-300 group-hover:ring-gold-400/70 sm:h-12 sm:w-40 lg:w-36 xl:w-44">
             <Image
               src={site.logo}
               alt=""
@@ -84,13 +101,20 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 aria-current={current ? "page" : undefined}
-                className={`focus-ring rounded-md px-2.5 py-2 text-[13px] font-semibold transition xl:px-3 xl:text-sm ${
+                className={`focus-ring relative rounded-md px-2.5 py-2 text-[13px] transition duration-200 xl:px-3 xl:text-sm ${
                   current
-                    ? "bg-teal-700 text-white"
-                    : "text-ink hover:bg-teal-50 hover:text-teal-900"
+                    ? "font-black text-teal-900"
+                    : "font-semibold text-ink hover:bg-teal-50 hover:text-teal-900"
                 }`}
               >
                 {item.label}
+                {/* Position + weight carry the current page, not colour alone. */}
+                <span
+                  aria-hidden="true"
+                  className={`absolute inset-x-2.5 -bottom-0.5 h-[3px] rounded-full bg-gold-400 transition-transform duration-300 ease-out xl:inset-x-3 ${
+                    current ? "scale-x-100" : "scale-x-0"
+                  }`}
+                />
               </Link>
             );
           })}
@@ -111,7 +135,7 @@ export function Header() {
           <a
             href={`tel:${site.phone.replaceAll(" ", "")}`}
             aria-label={`Call ${site.name} on ${site.phone}`}
-            className="focus-ring grid h-11 w-11 place-items-center rounded-md border border-teal-900/15 text-teal-800 transition hover:bg-teal-50 sm:hidden"
+            className="focus-ring grid h-11 w-11 place-items-center rounded-md border border-teal-900/15 text-teal-800 transition hover:border-teal-700 hover:bg-teal-50 sm:hidden"
           >
             <Phone size={20} aria-hidden="true" />
           </a>
@@ -119,7 +143,7 @@ export function Header() {
           <button
             ref={toggleRef}
             type="button"
-            className="focus-ring grid h-11 w-11 place-items-center rounded-md border border-teal-900/15 text-teal-900 transition hover:bg-teal-50 lg:hidden"
+            className="focus-ring grid h-11 w-11 place-items-center rounded-md border border-teal-900/15 text-teal-900 transition hover:border-teal-700 hover:bg-teal-50 lg:hidden"
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
             aria-controls={MENU_ID}
@@ -148,7 +172,7 @@ export function Header() {
         <ButtonLink href={donateNavItem.href} variant="gold" className="w-full">
           {donateNavItem.label}
         </ButtonLink>
-        <ul className="mt-3 grid gap-1">
+        <ul className="mt-4 grid gap-1">
           {primaryNavItems.map((item) => {
             const current = isCurrent(item.href);
             return (
@@ -156,8 +180,10 @@ export function Header() {
                 <Link
                   href={item.href}
                   aria-current={current ? "page" : undefined}
-                  className={`focus-ring flex min-h-11 items-center rounded-md px-3 text-sm font-bold transition ${
-                    current ? "bg-teal-700 text-white" : "text-ink hover:bg-teal-50"
+                  className={`focus-ring flex min-h-12 items-center gap-3 rounded-md border-l-[3px] px-3 text-sm transition ${
+                    current
+                      ? "border-gold-400 bg-white font-black text-teal-900 shadow-card"
+                      : "border-transparent font-bold text-ink hover:border-teal-700/40 hover:bg-teal-50"
                   }`}
                 >
                   {item.label}
@@ -166,10 +192,10 @@ export function Header() {
             );
           })}
         </ul>
-        <div className="mt-4 border-t border-teal-900/10 pt-4">
+        <div className="mt-5 border-t border-teal-900/10 pt-5">
           <a
             href={`tel:${site.phone.replaceAll(" ", "")}`}
-            className="focus-ring flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-bold text-teal-900 transition hover:bg-teal-50"
+            className="focus-ring flex min-h-12 items-center gap-3 rounded-md px-3 text-sm font-bold text-teal-900 transition hover:bg-teal-50"
           >
             <Phone size={18} aria-hidden="true" className="text-teal-700" />
             {site.phone}

@@ -11,12 +11,12 @@ export type ButtonVariant =
 export type ButtonSize = "sm" | "md" | "lg";
 
 const variants: Record<ButtonVariant, string> = {
-  primary: "bg-teal-700 text-white shadow-card hover:bg-teal-900",
-  secondary: "border border-teal-700 text-teal-900 hover:bg-teal-50",
-  light: "bg-white text-teal-900 shadow-card hover:bg-gold-100",
-  gold: "bg-gold-400 text-teal-900 shadow-card hover:bg-gold-200",
-  outlineLight: "border border-white/45 text-white hover:bg-white/10",
-  brandFacebook: "bg-blue-600 text-white shadow-card hover:bg-blue-900",
+  primary: "bg-teal-700 text-white shadow-card hover:bg-teal-900 hover:shadow-lift",
+  secondary: "border border-teal-700 text-teal-900 hover:bg-teal-50 hover:border-teal-900",
+  light: "bg-white text-teal-900 shadow-card hover:bg-gold-100 hover:shadow-soft",
+  gold: "bg-gold-400 text-teal-900 shadow-card hover:bg-gold-200 hover:shadow-lift",
+  outlineLight: "border border-white/45 text-white hover:bg-white/10 hover:border-white/70",
+  brandFacebook: "bg-blue-600 text-white shadow-card hover:bg-blue-900 hover:shadow-lift",
 };
 
 const sizes: Record<ButtonSize, string> = {
@@ -28,6 +28,9 @@ const sizes: Record<ButtonSize, string> = {
 /**
  * Shared button styling so plain anchors (external links, mailto, tel) look and
  * behave exactly like the internal `ButtonLink`.
+ *
+ * `link-arrow` lets a trailing chevron slide on hover; the 1px lift is the same
+ * gesture the interactive cards use, so the whole site responds the same way.
  */
 export function buttonClasses({
   variant = "primary",
@@ -38,7 +41,7 @@ export function buttonClasses({
   size?: ButtonSize;
   className?: string;
 } = {}) {
-  return `focus-ring inline-flex items-center justify-center gap-2 rounded-md text-center font-bold transition ${sizes[size]} ${variants[variant]} ${className}`.trim();
+  return `focus-ring link-arrow inline-flex items-center justify-center gap-2 rounded-md text-center font-bold transition duration-300 ease-out hover:-translate-y-0.5 ${sizes[size]} ${variants[variant]} ${className}`.trim();
 }
 
 type ButtonLinkProps = ComponentProps<typeof Link> & {

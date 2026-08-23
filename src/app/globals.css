@@ -10,6 +10,21 @@
      focus is always visible somewhere on the site. */
   --focus-inner: #f4b942;
   --focus-outer: #073b32;
+
+  /* Semantic surfaces. Naming the roles (rather than repeating hex values in
+     components) keeps the editorial palette consistent across every band. */
+  --surface-page: #f8f5ef;
+  --surface-raised: #ffffff;
+  --surface-sunken: #eef7f4;
+  --surface-ink: #073b32;
+  --hairline: rgba(7, 59, 50, 0.1);
+  --hairline-strong: rgba(7, 59, 50, 0.18);
+  --hairline-gold: rgba(244, 185, 66, 0.55);
+
+  /* One easing curve for every deliberate transition, so buttons, cards, and
+     section reveals all decelerate the same way. */
+  --ease-editorial: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --reveal-step: 65ms;
 }
 
 @media (min-width: 1024px) {
@@ -36,7 +51,7 @@ html {
 
 body {
   margin: 0;
-  background: #f8f5ef;
+  background: var(--surface-page);
   color: #172033;
   font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -136,6 +151,146 @@ main:focus {
   max-width: 100% !important;
 }
 
+@layer components {
+  /* ---- Editorial surface system -------------------------------------------
+     Every panel on the site is one of three things: a plain card, a card that
+     is also a link target, or a sunken panel. Centralising them here is what
+     keeps eight pages of grids reading as one publication. */
+
+  .card {
+    @apply relative rounded-lg border border-teal-900/10 bg-white shadow-card;
+  }
+
+  .card-sunken {
+    @apply relative rounded-lg border border-teal-900/10 bg-mist;
+  }
+
+  /* Applied alongside `group` on cards whose whole surface leads somewhere.
+     The lift is transform-only so it never triggers layout. */
+  .card-interactive {
+    @apply transition duration-300 ease-out;
+    @apply hover:-translate-y-1 hover:border-gold-400/70 hover:shadow-soft;
+    @apply focus-within:-translate-y-1 focus-within:border-gold-400/70 focus-within:shadow-soft;
+  }
+
+  /* A hairline that warms to gold on hover — the recurring editorial accent. */
+  .card-rule::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 3px;
+    border-radius: 0.875rem 0.875rem 0 0;
+    background: linear-gradient(90deg, var(--hairline-gold), rgba(244, 185, 66, 0));
+    opacity: 0;
+    transition: opacity 300ms var(--ease-editorial);
+    z-index: 1;
+  }
+
+  .group:hover .card-rule::before,
+  .group:focus-within .card-rule::before {
+    opacity: 1;
+  }
+
+  /* Media wells: the image zooms, the frame does not. */
+  .media-frame {
+    @apply relative overflow-hidden bg-mist;
+  }
+
+  .media-zoom {
+    @apply transition-transform duration-500 ease-out;
+  }
+
+  .group:hover .media-zoom,
+  .group:focus-within .media-zoom {
+    @apply scale-[1.06];
+  }
+
+  /* ---- Editorial typography ---------------------------------------------- */
+
+  .eyebrow {
+    @apply flex items-center gap-2.5 text-xs font-black uppercase tracking-[0.18em] sm:text-sm;
+  }
+
+  .eyebrow-rule {
+    @apply h-px w-7 shrink-0 bg-current opacity-70;
+  }
+
+  /* Section index numerals ("01", "02"). Tabular so they align in a column. */
+  .section-index {
+    font-variant-numeric: tabular-nums;
+    @apply font-serif text-sm font-black tracking-tight;
+  }
+
+  .stat-figure {
+    font-variant-numeric: tabular-nums;
+    @apply font-serif font-black leading-none text-teal-900;
+  }
+
+  /* Inline links inside body copy keep an underline for non-colour affordance. */
+  .link-underline {
+    @apply rounded-sm underline decoration-gold-400 decoration-2 underline-offset-4 transition hover:decoration-teal-700;
+  }
+
+  /* Arrow that slides on hover, used on "read more" style links. */
+  .link-arrow > svg {
+    @apply transition-transform duration-300 ease-out;
+  }
+
+  .link-arrow:hover > svg,
+  .group:hover .link-arrow > svg {
+    @apply translate-x-1;
+  }
+}
+
+@layer utilities {
+  /* Fine paper grain over the dark bands. Flat teal at hero scale reads as a
+     printing error on wide screens; the grain gives it a surface. */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    /* Sits above the photo/gradient fills but below anything the reader has to
+       read — content in a `.grain` band carries `relative z-10`. */
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* ---- Scroll reveal -------------------------------------------------------
+   `MotionSection` flips `data-revealed` on the section once it enters the
+   viewport; children opt into a staggered entrance by setting `--reveal-i`.
+   Kept in CSS rather than a motion library so the mobile-first audience does
+   not download an animation runtime for a fade.
+
+   These live in `base` on purpose. The settled state sets `transform: none`,
+   which ties on specificity with `.card-interactive:hover` — and most revealed
+   items are also interactive cards. Emitted after the components layer it would
+   win the tie and silently cancel every card's hover lift; in `base` the layer
+   order settles it instead. */
+@layer base {
+  [data-reveal-item] {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 550ms var(--ease-editorial),
+      transform 550ms var(--ease-editorial);
+    transition-delay: calc(var(--reveal-i, 0) * var(--reveal-step));
+  }
+
+  [data-revealed="true"] [data-reveal-item] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -143,6 +298,14 @@ main:focus {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    /* Without this a staggered list still arrives one item at a time. */
+    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .media-zoom,
+  .group:hover .media-zoom,
+  .group:focus-within .media-zoom {
+    transform: none !important;
   }
 }

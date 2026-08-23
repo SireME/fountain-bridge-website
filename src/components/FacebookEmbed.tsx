@@ -18,7 +18,7 @@ export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
   }, []);
 
   return (
-    <div className="overflow-hidden rounded-lg border border-teal-900/10 bg-white shadow-card">
+    <div className="card overflow-hidden">
       <div
         role="region"
         aria-label={`${site.name} Facebook timeline`}
@@ -38,11 +38,13 @@ export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
         />
       </div>
       <div className="border-t border-teal-900/10 bg-mist p-5 sm:p-6">
-        <div className="flex items-start gap-3">
-          <Share2 className="mt-1 shrink-0 text-blue-600" size={22} aria-hidden="true" />
+        <div className="flex items-start gap-3.5">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-md bg-white text-blue-600 ring-1 ring-teal-900/5">
+            <Share2 size={22} aria-hidden="true" />
+          </span>
           <div>
             <p className="font-serif text-lg font-black text-teal-900">Stay connected</p>
-            <p className="mt-1 text-sm leading-6 text-muted">
+            <p className="mt-1.5 text-sm leading-6 text-muted">
               Facebook is where {site.name} posts field photos, outreach albums, and event announcements first.
             </p>
             <a
@@ -50,7 +52,7 @@ export function FacebookEmbed({ compact = false }: { compact?: boolean }) {
               target="_blank"
               rel="noreferrer"
               aria-label={`Follow ${site.name} on Facebook (opens in a new tab)`}
-              className={buttonClasses({ variant: "brandFacebook", className: "mt-4" })}
+              className={buttonClasses({ variant: "brandFacebook", className: "mt-5" })}
             >
               Follow on Facebook
             </a>

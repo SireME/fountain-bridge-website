@@ -45,8 +45,8 @@ type SocialLinksProps = {
 export function SocialLinks({ tone = "light", showLabels = false, className = "" }: SocialLinksProps) {
   const styles =
     tone === "light"
-      ? "border-white/25 bg-white/10 text-white hover:bg-white/20"
-      : "border-teal-900/15 bg-white text-teal-800 hover:bg-teal-50";
+      ? "border-white/25 bg-white/10 text-white hover:border-gold-400/70 hover:bg-white/20"
+      : "border-teal-900/15 bg-white text-teal-800 hover:border-gold-400/70 hover:bg-teal-50";
 
   return (
     <ul className={`flex flex-wrap items-center gap-3 ${className}`.trim()}>
@@ -57,7 +57,7 @@ export function SocialLinks({ tone = "light", showLabels = false, className = ""
             target="_blank"
             rel="noreferrer"
             aria-label={`${label} (opens in a new tab)`}
-            className={`focus-ring inline-flex min-h-11 items-center gap-2 rounded-md border px-4 py-2 text-sm font-bold transition ${styles}`}
+            className={`focus-ring inline-flex min-h-11 items-center gap-2 rounded-md border px-4 py-2 text-sm font-bold transition duration-300 ease-out hover:-translate-y-0.5 ${styles}`}
           >
             <Mark className="h-5 w-5" />
             {showLabels ? <span>{short}</span> : null}

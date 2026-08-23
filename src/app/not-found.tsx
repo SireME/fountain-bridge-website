@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { ButtonLink } from "@/components/ButtonLink";
 import { PageHero } from "@/components/PageHero";
 import { navItems, site } from "@/data/site";
@@ -23,26 +24,34 @@ export default function NotFound() {
       />
       <section aria-labelledby="site-sections" className="section-pad">
         <div className="section-shell">
-          <h2 id="site-sections" className="font-serif text-heading font-black text-teal-900">
+          <p className="eyebrow text-gold-600">
+            <span aria-hidden="true" className="eyebrow-rule" />
+            Site index
+          </p>
+          <h2 id="site-sections" className="mt-4 font-serif text-heading font-black text-teal-900">
             Every section of the site
           </h2>
-          <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {navItems.map((item) => (
+          <ul className="mt-9 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {navItems.map((item, index) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="focus-ring flex min-h-14 items-center justify-between gap-3 rounded-lg border border-teal-900/10 bg-white px-5 font-bold text-teal-900 shadow-card transition hover:border-teal-700/40 hover:bg-teal-50"
+                  className="focus-ring link-arrow group card flex min-h-16 items-center justify-between gap-3 px-5 font-bold text-teal-900 transition duration-300 ease-out hover:-translate-y-1 hover:border-gold-400/70 hover:shadow-soft"
                 >
-                  {item.label}
-                  <span aria-hidden="true" className="text-gold-600">
-                    →
+                  <span className="flex items-center gap-3.5">
+                    <span aria-hidden="true" className="section-index text-teal-900/30">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    {item.label}
                   </span>
+                  <ArrowRight size={18} className="shrink-0 text-gold-600" aria-hidden="true" />
                 </Link>
               </li>
             ))}
           </ul>
-          <ButtonLink href="/donate" variant="primary" className="mt-8">
+          <ButtonLink href="/donate" variant="primary" className="mt-9">
             Support our work
+            <ArrowRight size={18} aria-hidden="true" />
           </ButtonLink>
         </div>
       </section>

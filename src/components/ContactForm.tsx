@@ -7,7 +7,7 @@ import { contactTopics, site } from "@/data/site";
 type Status = { tone: "success" | "error"; message: string } | null;
 
 const fieldClasses =
-  "focus-ring w-full rounded-md border border-teal-900/20 bg-white px-4 py-3 font-normal text-ink placeholder:text-muted hover:border-teal-700/50";
+  "focus-ring w-full rounded-md border border-teal-900/20 bg-linen/50 px-4 py-3 font-normal text-ink transition duration-200 placeholder:text-muted hover:border-teal-700/60 hover:bg-white focus:bg-white";
 
 export function ContactForm() {
   const [status, setStatus] = useState<Status>(null);
@@ -66,17 +66,22 @@ export function ContactForm() {
     <form
       onSubmit={handleSubmit}
       aria-labelledby="contact-form-title"
-      className="rounded-lg bg-white p-6 shadow-card sm:p-8"
+      className="card p-6 sm:p-8"
     >
-      <h2 id="contact-form-title" className="font-serif text-subheading font-black text-teal-900">
+      <p className="eyebrow text-gold-600">
+        <span aria-hidden="true" className="eyebrow-rule" />
         Send a message
+      </p>
+      <h2 id="contact-form-title" className="mt-4 font-serif text-heading font-black text-teal-900">
+        Tell us how we can help
       </h2>
-      <p className="mt-2 text-sm leading-6 text-muted">
+      <div aria-hidden="true" className="mt-5 h-1 w-14 rounded-full bg-gold-400" />
+      <p className="mt-5 text-sm leading-6 text-muted">
         Fields marked with an asterisk (<span aria-hidden="true">*</span>
         <span className="sr-only">star</span>) are required. {site.responseTime}
       </p>
 
-      <div className="mt-6 grid gap-5 sm:grid-cols-2">
+      <div className="mt-7 grid gap-5 sm:grid-cols-2">
         <div className="grid gap-2">
           <label htmlFor="contact-name" className="text-sm font-bold text-teal-900">
             Name <RequiredMark />
@@ -154,7 +159,7 @@ export function ContactForm() {
         type="submit"
         disabled={sending}
         aria-busy={sending}
-        className="focus-ring mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-teal-700 px-6 py-3 text-base font-bold text-white shadow-card transition hover:bg-teal-900 disabled:cursor-not-allowed disabled:bg-teal-900/85 sm:w-auto"
+        className="focus-ring mt-8 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-teal-700 px-6 py-3 text-base font-bold text-white shadow-card transition duration-300 ease-out hover:-translate-y-0.5 hover:bg-teal-900 hover:shadow-lift disabled:translate-y-0 disabled:cursor-not-allowed disabled:bg-teal-900/85 disabled:shadow-card sm:w-auto"
       >
         <Send size={18} aria-hidden="true" />
         {sending ? "Sending…" : "Send message"}
