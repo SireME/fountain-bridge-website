@@ -3,13 +3,13 @@ import { MotionSection } from "@/components/MotionSection";
 import { revealItem } from "@/components/reveal";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
-import { site, updates } from "@/data/site";
+import { pageMetadata, site, updates } from "@/data/site";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "News",
   description: "Latest Fountain Bridge updates and live Facebook feed.",
-  alternates: { canonical: "/news" },
-};
+  path: "/news",
+});
 
 export default function NewsPage() {
   return (

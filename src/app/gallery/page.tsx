@@ -6,13 +6,13 @@ import { MotionSection } from "@/components/MotionSection";
 import { revealItem } from "@/components/reveal";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
-import { facebook, gallery, site } from "@/data/site";
+import { facebook, gallery, pageMetadata, site } from "@/data/site";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Impact gallery",
   description: "Photo gallery for Fountain Bridge programs and community work.",
-  alternates: { canonical: "/gallery" },
-};
+  path: "/gallery",
+});
 
 export default function GalleryPage() {
   return (
@@ -40,9 +40,12 @@ export default function GalleryPage() {
               <li key={item.title} {...revealItem(index)}>
                 <figure className="group card card-interactive card-rule flex h-full flex-col overflow-hidden">
                   <div className="media-frame h-64 sm:h-72">
+                    {/* The figcaption below names and describes the photo, so a
+                        matching alt would make a screen reader read the caption
+                        twice for every plate in the grid. */}
                     <LoadingImage
                       src={item.image}
-                      alt={item.title}
+                      alt=""
                       fill
                       loading={index < 3 ? "eager" : "lazy"}
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

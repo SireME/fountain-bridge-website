@@ -7,14 +7,13 @@ import { revealItem } from "@/components/reveal";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { SocialLinks } from "@/components/SocialLinks";
-import { site, whatsappUrl } from "@/data/site";
+import { pageMetadata, site, whatsappUrl } from "@/data/site";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Contact",
-  description:
-    "Contact Fountain Bridge for volunteering, donations, partnerships, referrals, and media inquiries.",
-  alternates: { canonical: "/contact" },
-};
+  description: "Contact Fountain Bridge for volunteering, donations, partnerships, referrals, and media inquiries.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   const telHref = `tel:${site.phone.replaceAll(" ", "")}`;

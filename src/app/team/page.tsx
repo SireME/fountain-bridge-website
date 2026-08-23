@@ -4,13 +4,13 @@ import { MotionSection } from "@/components/MotionSection";
 import { revealItem } from "@/components/reveal";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
-import { team } from "@/data/site";
+import { pageMetadata, team } from "@/data/site";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Team",
   description: "Leadership and team profiles for Fountain Bridge.",
-  alternates: { canonical: "/team" },
-};
+  path: "/team",
+});
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/);

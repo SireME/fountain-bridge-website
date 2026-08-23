@@ -5,13 +5,13 @@ import { MotionSection } from "@/components/MotionSection";
 import { revealItem } from "@/components/reveal";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
-import { events } from "@/data/site";
+import { events, pageMetadata } from "@/data/site";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Events",
   description: "Upcoming events, field visits, and Facebook events for Fountain Bridge.",
-  alternates: { canonical: "/events" },
-};
+  path: "/events",
+});
 
 export default function EventsPage() {
   return (

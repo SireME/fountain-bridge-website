@@ -4,13 +4,13 @@ import { MotionSection } from "@/components/MotionSection";
 import { revealItem } from "@/components/reveal";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
-import { donationTiers, paymentMethods, site, whatsappUrl } from "@/data/site";
+import { donationTiers, pageMetadata, paymentMethods, site, whatsappUrl } from "@/data/site";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Donate",
   description: "Support Fountain Bridge programs with transparent giving.",
-  alternates: { canonical: "/donate" },
-};
+  path: "/donate",
+});
 
 const givingSteps = [
   {

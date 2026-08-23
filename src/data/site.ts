@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   BookOpen,
   HandCoins,
@@ -83,6 +84,50 @@ export const site = {
     "Donations help fund school materials, outreach logistics, emergency support, training sessions, and community events.",
   donationHelpContact: "+237 672 073 459",
 };
+
+/**
+ * Per-page metadata.
+ *
+ * Next.js merges metadata field by field, so a page that sets only `title` and
+ * `description` still inherits the root layout's `openGraph` and `twitter`
+ * blocks whole. Every inner page therefore advertised the homepage's title and
+ * `og:url`, and a shared /donate link previewed — and deduplicated — as `/`.
+ * Deriving both blocks from the page's own title, description, and path is what
+ * keeps a shared link pointing at the page that was actually shared.
+ */
+export function pageMetadata({
+  title,
+  description,
+  path,
+}: {
+  title: string;
+  description: string;
+  path: string;
+}): Metadata {
+  const shareTitle = `${title} | ${site.name}`;
+  const preview = "/fountain-bridge-preview.jpg";
+
+  return {
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: {
+      title: shareTitle,
+      description,
+      url: path,
+      siteName: site.name,
+      type: "website",
+      locale: "en_US",
+      images: [{ url: preview, width: 1200, height: 630, alt: `${site.name} logo` }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: shareTitle,
+      description,
+      images: [preview],
+    },
+  };
+}
 
 /** Click-to-chat link for the public organisation number. */
 export const whatsappUrl = `https://wa.me/${site.phone.replace(/\D/g, "")}`;

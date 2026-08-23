@@ -206,7 +206,7 @@ export default function Home() {
                 <div className="media-frame h-44">
                   <LoadingImage
                     src={item.image}
-                    alt={item.title}
+                    alt=""
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     className="media-zoom object-cover"

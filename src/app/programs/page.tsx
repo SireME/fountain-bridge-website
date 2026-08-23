@@ -6,14 +6,13 @@ import { MotionSection } from "@/components/MotionSection";
 import { revealItem } from "@/components/reveal";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
-import { impactAreas, programs, projects } from "@/data/site";
+import { impactAreas, pageMetadata, programs, projects } from "@/data/site";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Programs",
-  description:
-    "Fountain Bridge programs in health outreach, education support, women and youth empowerment, and elderly inclusion.",
-  alternates: { canonical: "/programs" },
-};
+  description: "Fountain Bridge programs in health outreach, education support, women and youth empowerment, and elderly inclusion.",
+  path: "/programs",
+});
 
 export default function ProgramsPage() {
   return (
@@ -99,7 +98,7 @@ export default function ProgramsPage() {
                 <div className="media-frame h-52 sm:h-56">
                   <LoadingImage
                     src={item.image}
-                    alt={item.title}
+                    alt=""
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="media-zoom object-cover"
@@ -132,7 +131,7 @@ export default function ProgramsPage() {
                 <div className="media-frame h-60 sm:h-72">
                   <LoadingImage
                     src={project.image}
-                    alt={project.title}
+                    alt=""
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     className="media-zoom object-cover"

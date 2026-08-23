@@ -7,13 +7,13 @@ import { revealItem } from "@/components/reveal";
 import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { SocialLinks } from "@/components/SocialLinks";
-import { achievements, facebook, partners, site } from "@/data/site";
+import { achievements, facebook, pageMetadata, partners, site } from "@/data/site";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "About",
   description: "Who Fountain Bridge is, why it exists, and the values guiding its community work.",
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (
@@ -187,7 +187,7 @@ export default function AboutPage() {
                 <div className="media-frame h-56 sm:h-64">
                   <LoadingImage
                     src={item.image}
-                    alt={item.title}
+                    alt=""
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="media-zoom object-cover"
